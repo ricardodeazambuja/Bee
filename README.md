@@ -12,3 +12,7 @@ http://nbviewer.ipython.org/github/ricardodeazambuja/LiquidStateMachine-Python/b
 ### Comparisons between the first version of my simulation and Brian:
 
 http://nbviewer.ipython.org/github/ricardodeazambuja/LiquidStateMachine-Python/blob/master/Simple_LiquidStateMachine_Simulator_Comparisons-1.ipynb
+
+http://nbviewer.ipython.org/github/ricardodeazambuja/LiquidStateMachine-Python/blob/master/Simple_LiquidStateMachine_Simulator_Comparisons-2.ipynb
+
+http://nbviewer.ipython.org/github/ricardodeazambuja/LiquidStateMachine-Python/blob/master/Simple_LiquidStateMachine_Simulator_Comparisons-3.ipynb
