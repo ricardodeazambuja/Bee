@@ -212,45 +212,44 @@ liquid_ext_update.argtypes = [
 ## Python functions to expose the ones ABOVE interfaced using ctypes:
 ##
 
-def initialize_sim(my_net_shape=[15,3,3], my_lbd_value=1.2, my_seeds=numpy.array(numpy.random.randint(0,10000,5),dtype=numpy.uint32)):
+def initialize_sim( my_net_shape=[15,3,3], my_lbd_value=1.2, my_seeds=numpy.random.randint(0,10000,5),
+                    SpkLiq_step = 0.2E-3,SpkLiq_taum = 30.0E-3,SpkLiq_cm = 30.0E-9,
+                    SpkLiq_taue = 3.0E-3,SpkLiq_taui = 6.0E-3,
+                    SpkLiq_membrane_rand = [13.5E-3,15.0E-3],
+                    SpkLiq_current_rand = [14.975E-9,15.025E-9],
+                    SpkLiq_noisy_current_rand = 0.2E-9,
+                    SpkLiq_vresets = 13.5E-3,
+                    SpkLiq_vthres = 15.0E-3,
+                    SpkLiq_vrest = 0.0,
+                    SpkLiq_refractory = [3E-3,2E-3],
+                    SpkLiq_inhibitory_percentage = 20,
+                    SpkLiq_threads_N = 4,
+                    SpkLiq_min_perc = 0.01):
+
     # User setup
     SpkLiq_net_shape = numpy.array(my_net_shape,dtype=numpy.int32)
     SpkLiq_lbd_value = ctypes.c_float(my_lbd_value)
-    SpkLiq_step = ctypes.c_float(0.2E-3)
-    SpkLiq_taum = ctypes.c_float(30.0E-3)
-    SpkLiq_cm = ctypes.c_float(30.0E-9)
-    SpkLiq_taue = ctypes.c_float(3.0E-3)
-    SpkLiq_taui = ctypes.c_float(6.0E-3)
-    SpkLiq_membrane_rand = numpy.array([13.5E-3,15.0E-3],dtype=numpy.float32)
-    SpkLiq_current_rand = numpy.array([14.975E-9,15.025E-9],dtype=numpy.float32)
-    SpkLiq_noisy_current_rand = ctypes.c_float(0.2E-9)
-    SpkLiq_vresets = ctypes.c_float(13.5E-3)
-    SpkLiq_vthres = ctypes.c_float(15.0E-3)
-    SpkLiq_vrest = ctypes.c_float(0)
-    SpkLiq_refractory = numpy.array([3E-3,2E-3],dtype=numpy.float32)
-    SpkLiq_inhibitory_percentage = ctypes.c_float(20)
-    SpkLiq_threads_N = ctypes.c_int32(4)
-    SpkLiq_min_perc = ctypes.c_float(0.01)
+
 
     success = BEE_setup(
                             SpkLiq_net_shape,
                             SpkLiq_lbd_value,
-                            SpkLiq_step,
-                            SpkLiq_taum,
-                            SpkLiq_cm,
-                            SpkLiq_taue,
-                            SpkLiq_taui,
-                            SpkLiq_membrane_rand,
-                            SpkLiq_current_rand,
-                            SpkLiq_noisy_current_rand,
-                            SpkLiq_vresets,
-                            SpkLiq_vthres,
-                            SpkLiq_vrest,
-                            SpkLiq_refractory,
-                            SpkLiq_inhibitory_percentage,
-                            SpkLiq_min_perc,
-                            my_seeds,
-                            SpkLiq_threads_N
+                            ctypes.c_float(SpkLiq_step),
+                            ctypes.c_float(SpkLiq_taum),
+                            ctypes.c_float(SpkLiq_cm),
+                            ctypes.c_float(SpkLiq_taue),
+                            ctypes.c_float(SpkLiq_taui),
+                            numpy.array(SpkLiq_membrane_rand,dtype=numpy.float32),
+                            numpy.array(SpkLiq_current_rand,dtype=numpy.float32),
+                            ctypes.c_float(SpkLiq_noisy_current_rand),
+                            ctypes.c_float(SpkLiq_vresets),
+                            ctypes.c_float(SpkLiq_vthres),
+                            ctypes.c_float(SpkLiq_vrest),
+                            numpy.array(SpkLiq_refractory,dtype=numpy.float32),
+                            ctypes.c_float(SpkLiq_inhibitory_percentage),
+                            ctypes.c_float(SpkLiq_min_perc),
+                            numpy.array(my_seeds,dtype=numpy.uint32),
+                            ctypes.c_int32(SpkLiq_threads_N)
     )
     
     # Initializes the liquid
@@ -369,9 +368,9 @@ def output_sim(number_of_neurons):
         print "Simulator is not ready!"    
 
 
-def output_sim_binary(number_of_neurons):
+def output_sim_full(number_of_neurons):
     '''
-    Returns the last output spikes in binary format (numpy array int32)
+    Returns the last output spikes indices including the no spiking ones (numpy array int32)
     '''    
     if BEE_initialized():   
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
@@ -384,7 +383,7 @@ def output_sim_binary(number_of_neurons):
 # Reads output spikes - returns an array with the indices of the neurons who spiked
 def reads_spikes(number_of_neurons):
     '''
-    Returns the last output spikes indices (numpy array int32)
+    Returns only the last output spikes indices (numpy array int32)
     '''
     if BEE_initialized():    
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
