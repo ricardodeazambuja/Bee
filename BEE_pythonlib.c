@@ -2114,10 +2114,10 @@ void free_all(){
       free(SpkLiq_neurons_exc_injections_total); //stores the cummulative total number of connections according to the neurons index
       free(SpkLiq_neurons_inh_injections_total); //stores the cummulative total number of connections according to the neurons index
 
-      free(SpkLiq_receive_spike_i_thread); //stores the indices of which liquid's inhibitory neuron receives a spike (output from the threads)
-      free(SpkLiq_receive_spike_i_w_thread); //stores the weights of the above received spikes
-      free(SpkLiq_receive_spike_e_thread); //stores the indices of which liquid's excitatory neuron receives a spike (output from the threads)
-      free(SpkLiq_receive_spike_e_w_thread); //stores the weights of the above received spikes
+      //free(SpkLiq_receive_spike_i_thread); //stores the indices of which liquid's inhibitory neuron receives a spike (output from the threads)
+      //free(SpkLiq_receive_spike_i_w_thread); //stores the weights of the above received spikes
+      //free(SpkLiq_receive_spike_e_thread); //stores the indices of which liquid's excitatory neuron receives a spike (output from the threads)
+      //free(SpkLiq_receive_spike_e_w_thread); //stores the weights of the above received spikes
 
       free(SpkLiq_pre_i); //stores the indices of the inhibitory=>? pre-synaptic connections in the liquid
       free(SpkLiq_pos_i); //stores the indices of the inhibitory=>? pos-synaptic connections in the liquid
@@ -2217,17 +2217,15 @@ void free_all(){
           SpkLiq_connected = 0;  //tells Python the connection variables are not available
         }
 
-      if (SpkLiq_connected==0) // verifies if the connections where not processed or already have been freed
-      {
-        free(SpkLiq_receive_spike_i_thread);
-        free(SpkLiq_receive_spike_i_w_thread);
-        free(SpkLiq_receive_spike_e_thread);
-        free(SpkLiq_receive_spike_e_w_thread);
-        free(SpkLiq_neurons_inh_injections);
-        free(SpkLiq_neurons_exc_injections);
-        free(SpkLiq_neurons_exc_injections_w);
-        free(SpkLiq_neurons_inh_injections_w);
-      }
+      free(SpkLiq_receive_spike_i_thread);
+      free(SpkLiq_receive_spike_i_w_thread);
+      free(SpkLiq_receive_spike_e_thread);
+      free(SpkLiq_receive_spike_e_w_thread);
+
+      free(SpkLiq_neurons_inh_injections);
+      free(SpkLiq_neurons_exc_injections);
+      free(SpkLiq_neurons_exc_injections_w);
+      free(SpkLiq_neurons_inh_injections_w);
 
       SpkLiq_initialized = 0; //tells Python the main variables are not available
   }
