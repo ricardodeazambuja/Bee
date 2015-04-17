@@ -2219,15 +2219,6 @@ void free_all(){
 
       if (SpkLiq_connected==0) // verifies if the connections where not processed or already have been freed
       {
-        free(SpkLiq_pre_i_thread);
-        free(SpkLiq_pos_i_thread);
-        free(SpkLiq_w_i_thread);
-        free(SpkLiq_pre_e_thread);
-        free(SpkLiq_pos_e_thread);
-        free(SpkLiq_w_e_thread);
-        free(SpkLiq_inh_connections_thread);
-        free(SpkLiq_exc_connections_thread);
-        //free(SpkLiq_threads_states);
         free(SpkLiq_receive_spike_i_thread);
         free(SpkLiq_receive_spike_i_w_thread);
         free(SpkLiq_receive_spike_e_thread);
@@ -2242,6 +2233,7 @@ void free_all(){
   }
 
 }
+
 
 int check_init()
 {
