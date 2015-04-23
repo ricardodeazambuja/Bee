@@ -1720,23 +1720,11 @@ void *SpikingLiquid_update_internal_thread(void *args)
       //if(SpkLiq_neurons_connected[i])
       if(1)
       { //Only updates neurons that are actually connected to another ones!
-        // Generates the new values to the noisy currents
-        // # RANDOM-4
-        // # Noisy corrents
-        SpkLiq_noisy_currents_internal[i] = (float)rk_normal(SpkLiq_threads_states_internal,0,1)*SpkLiq_noisy_current_rand_internal;
-
-        // # After the currents, it is necessary to update the membrane voltage
-        // # Integrating the function:
-        // dv/dt  = (ie + ii + i_offset + i_inj)/c_m + (v_rest-v)/tau_m
-        if(SpkLiq_refrac_timer_internal[i]>0)
-        {
-            SpkLiq_neurons_membrane_internal[i] = SpkLiq_vresets_internal; // Resets the membrane of the refractory ones
-        }else
-        { //If the membrane did not reset, then it is necessary to integrate
-            SpkLiq_neurons_membrane_internal[i] += ((SpkLiq_neurons_exc_curr_internal[i] + SpkLiq_neurons_inh_curr_internal[i] + SpkLiq_noisy_offset_currents_internal[i] + SpkLiq_noisy_currents_internal[i])/SpkLiq_cm_internal + (SpkLiq_vrest_internal-SpkLiq_neurons_membrane_internal[i])/SpkLiq_taum_internal)*SpkLiq_step_internal;
-        }
-
-        // After the integration, check if the neuron spiked by comparing its the membrane voltage with the threshold
+//////HERE I'M SUPPOSING THE SIMULATOR IS ALWAYS GOING TO USE POSITIVE VALUES TO SpkLiq_vthres
+        if(SpkLiq_neurons_membrane_internal[i]<-SpkLiq_vthres)
+            SpkLiq_neurons_membrane_internal[i]=-SpkLiq_vthres; //Limits the maximum value
+            
+        //Check if the neuron spiked by comparing its the membrane voltage with the threshold
         if(SpkLiq_neurons_membrane_internal[i]>SpkLiq_vthres)
         {
             // SpkLiq_test_vthres_internal[i] = 1; //# Verifies who should spike and creates a boolean vector with this information
@@ -1755,6 +1743,23 @@ void *SpikingLiquid_update_internal_thread(void *args)
             SpkLiq_test_vthres_internal[i] = 0; //# Verifies who should spike and creates a boolean vector with this information
 /////FAST SET BIT OFF
             SpkLiq_test_vthres_bits[i>>6] &= ~(1<<(i&(64-1)));            
+        }
+       
+       
+        // Generates the new values to the noisy currents
+        // # RANDOM-4
+        // # Noisy corrents
+        SpkLiq_noisy_currents_internal[i] = (float)rk_normal(SpkLiq_threads_states_internal,0,1)*SpkLiq_noisy_current_rand_internal;
+
+        // # After the currents, it is necessary to update the membrane voltage
+        // # Integrating the function:
+        // dv/dt  = (ie + ii + i_offset + i_inj)/c_m + (v_rest-v)/tau_m
+        if(SpkLiq_refrac_timer_internal[i]>0)
+        {
+            SpkLiq_neurons_membrane_internal[i] = SpkLiq_vresets_internal; // Resets the membrane of the refractory ones
+        }else
+        { //If the membrane did not reset, then it is necessary to integrate
+            SpkLiq_neurons_membrane_internal[i] += ((SpkLiq_neurons_exc_curr_internal[i] + SpkLiq_neurons_inh_curr_internal[i] + SpkLiq_noisy_offset_currents_internal[i] + SpkLiq_noisy_currents_internal[i])/SpkLiq_cm_internal + (SpkLiq_vrest_internal-SpkLiq_neurons_membrane_internal[i])/SpkLiq_taum_internal)*SpkLiq_step_internal;
         }
 
         if (SpkLiq_refrac_timer_internal[i]<0)
