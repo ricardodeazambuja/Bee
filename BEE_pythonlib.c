@@ -1717,7 +1717,8 @@ void *SpikingLiquid_update_internal_thread(void *args)
 
     for(int i=(const int)loop_start; i<(const int)loop_end; i++)
     {
-      if(SpkLiq_neurons_connected[i])
+      //if(SpkLiq_neurons_connected[i])
+      if(1)
       { //Only updates neurons that are actually connected to another ones!
         // Generates the new values to the noisy currents
         // # RANDOM-4
@@ -1803,7 +1804,8 @@ void SpikingLiquid_update(const int *restrict const spikes_exc, const int *restr
     // to be reduced just like when one time SpkLiq_step had passed.
     for(int i=0; i<SpkLiq_number_of_neurons; i++){
 ///////////////////////////////////////////////////////////////////////////
-      if(SpkLiq_neurons_connected[i])
+      //if(SpkLiq_neurons_connected[i])
+      if(1)
       { //Only updates neurons that are actually connected to another ones!
         SpkLiq_neurons_inh_curr_internal[i] += (-SpkLiq_neurons_inh_curr_internal[i]/SpkLiq_taui_internal)*SpkLiq_step_internal; 
         // Updates the INHIBITORY current values
