@@ -1720,12 +1720,9 @@ void *SpikingLiquid_update_internal_thread(void *args)
       //if(SpkLiq_neurons_connected[i])
       if(1)
       { //Only updates neurons that are actually connected to another ones!
-//////HERE I'M SUPPOSING THE SIMULATOR IS ALWAYS GOING TO USE POSITIVE VALUES TO SpkLiq_vthres
-        if(SpkLiq_neurons_membrane_internal[i]<-SpkLiq_vthres)
-            SpkLiq_neurons_membrane_internal[i]=-SpkLiq_vthres; //Limits the maximum value
-            
+       
         //Check if the neuron spiked by comparing its the membrane voltage with the threshold
-        if(SpkLiq_neurons_membrane_internal[i]>SpkLiq_vthres)
+        if(SpkLiq_neurons_membrane_internal[i]>=SpkLiq_vthres)
         {
             // SpkLiq_test_vthres_internal[i] = 1; //# Verifies who should spike and creates a boolean vector with this information
             SpkLiq_test_vthres_internal[i] = i+1; //Saves the index of the neuron who spiked (from 1 to SpkLiq_number_of_neurons)
@@ -1762,6 +1759,16 @@ void *SpikingLiquid_update_internal_thread(void *args)
             SpkLiq_neurons_membrane_internal[i] += ((SpkLiq_neurons_exc_curr_internal[i] + SpkLiq_neurons_inh_curr_internal[i] + SpkLiq_noisy_offset_currents_internal[i] + SpkLiq_noisy_currents_internal[i])/SpkLiq_cm_internal + (SpkLiq_vrest_internal-SpkLiq_neurons_membrane_internal[i])/SpkLiq_taum_internal)*SpkLiq_step_internal;
         }
 
+//////HERE I'M CLAMPING THE POSITIVE VALUE OF THE MEMBRANE VOLTAGE
+        if(SpkLiq_neurons_membrane_internal[i]>SpkLiq_vthres)
+            SpkLiq_neurons_membrane_internal[i]=SpkLiq_vthres; //Limits the maximum value
+
+      
+//////HERE I'M SUPPOSING THE SIMULATOR IS ALWAYS GOING TO USE POSITIVE VALUES TO SpkLiq_vthres
+        if(SpkLiq_neurons_membrane_internal[i]<-SpkLiq_vthres)
+            SpkLiq_neurons_membrane_internal[i]=-SpkLiq_vthres; //Limits the minimum value
+      
+      
         if (SpkLiq_refrac_timer_internal[i]<0)
                   SpkLiq_refrac_timer_internal[i]=0;
 
