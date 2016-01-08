@@ -3,7 +3,8 @@ import numpy
 import sys
 import ctypes
 import time
-SNNSIM=ctypes.CDLL("libBEE.so")
+SNNSIM=ctypes.CDLL("/usr/local/lib/libBEE.so")
+#SNNSIM=ctypes.CDLL("libBEE.so")
 
 
 ##
