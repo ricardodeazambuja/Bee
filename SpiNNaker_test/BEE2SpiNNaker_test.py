@@ -30,7 +30,7 @@ import numpy
 
 import pylab
 
-host_IP = '192.169.110.2' # when Spinn-3 is connected
+# host_IP = '192.169.110.2' # when Spinn-3 is connected
 # host_IP = '192.168.1.2' # when Spinn-5 is connected
 
 # Base code from:
@@ -212,7 +212,7 @@ sim.Projection(pop_poisson_inh_n, pop_lsm_inh, sim.OneToOneConnector(weights=-po
 #
 
 tspk = simulation_timestep*50 # The neurons spike after 50 time steps!
-number_of_spikes = 50
+number_of_spikes = 500
 
 spiketimes = [(i,tspk) for i in range(number_of_spikes)] 
                 # The spikes are going to be received during the simulation, 
