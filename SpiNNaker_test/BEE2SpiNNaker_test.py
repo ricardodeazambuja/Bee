@@ -105,6 +105,8 @@ translate_inh_idx = dict(zip(inh_neuron_idx,range(len(inh_neuron_idx))))
 # translate_inh_idx[BEE_index]=>spinnaker_index
 # inh_neuron_idx[spinnaker_index]=>BEE_index
 
+print "Liquid->Liquid connections... Populations"
+
 # Creates two separated populations: one for excitatory neurons and other for inhibitory
 # It's necessary to divide excitatory and inhibitory neurons because it's not possible to set
 # different values for the refractory period inside the same population (using this old SpiNNaker version)
@@ -143,6 +145,8 @@ pop_lsm_inh.tset('v_init',init_membrane_v_inh)
 #
 # Creating the EXC to ??? connections
 #
+print "Liquid->Liquid connections... EXC to ???"
+
 indices_pre_exc = numpy.load("indices_pre_exc.npy")
 indices_pos_exc = numpy.load("indices_pos_exc.npy")
 weights_pre_exc = numpy.load("weights_pre_exc.npy")
@@ -157,19 +161,20 @@ indices_pre_exc_e2e=[(numpy.abs(exc_neuron_idx-i)).argmin() for i in indices_pre
 indices_pos_exc_e2e=[(numpy.abs(exc_neuron_idx-i)).argmin() for i in indices_pos_exc[exc2exc]]
 
 connections_exc2exc = sim.FromListConnector(conn_list=zip(indices_pre_exc_e2e,indices_pos_exc_e2e,weights_pre_exc[exc2exc],[0.0]*len(exc2exc)))
-sim.Projection(pop_lsm_exc,pop_lsm_exc,connections_exc2exc,label="EXC2EXC_conn")
+sim.Projection(pop_lsm_exc,pop_lsm_exc,connections_exc2exc,label="EXC2EXC_conn", target='excitatory')
 
 # EXC2INH
 indices_pre_exc_e2i=[(numpy.abs(inh_neuron_idx-i)).argmin() for i in indices_pre_exc[exc2inh]]
 indices_pos_exc_e2i=[(numpy.abs(inh_neuron_idx-i)).argmin() for i in indices_pos_exc[exc2inh]]
 
 connections_exc2inh = sim.FromListConnector(conn_list=zip(indices_pre_exc_e2i,indices_pos_exc_e2i,weights_pre_exc[exc2inh],[0.0]*len(exc2inh)))
-sim.Projection(pop_lsm_exc,pop_lsm_inh,connections_exc2inh,label="EXC2INH_conn")
+sim.Projection(pop_lsm_exc,pop_lsm_inh,connections_exc2inh,label="EXC2INH_conn", target='excitatory')
 
 
 #
 # Creating the INH to ??? connections
 #
+print "Liquid->Liquid connections... INH to ???"
 indices_pre_inh = numpy.load("indices_pre_inh.npy")
 indices_pos_inh = numpy.load("indices_pos_inh.npy")
 weights_pre_inh = numpy.load("weights_pre_inh.npy")
@@ -184,14 +189,14 @@ indices_pre_inh_i2e=[(numpy.abs(exc_neuron_idx-i)).argmin() for i in indices_pre
 indices_pos_inh_i2e=[(numpy.abs(exc_neuron_idx-i)).argmin() for i in indices_pos_inh[inh2exc]]
 
 connections_inh2exc = sim.FromListConnector(conn_list=zip(indices_pre_inh_i2e,indices_pos_inh_i2e,weights_pre_inh[inh2exc],[0.0]*len(inh2exc)))
-sim.Projection(pop_lsm_inh,pop_lsm_exc,connections_inh2exc,label="INH2EXC_conn")
+sim.Projection(pop_lsm_inh,pop_lsm_exc,connections_inh2exc,label="INH2EXC_conn", target='inhibitory')
 
 # INH2INH
 indices_pre_inh_i2i=[(numpy.abs(inh_neuron_idx-i)).argmin() for i in indices_pre_inh[inh2inh]]
 indices_pos_inh_i2i=[(numpy.abs(inh_neuron_idx-i)).argmin() for i in indices_pos_inh[inh2inh]]
 
 connections_inh2inh = sim.FromListConnector(conn_list=zip(indices_pre_inh_i2i,indices_pos_inh_i2i,weights_pre_inh[inh2inh],[0.0]*len(inh2inh)))
-sim.Projection(pop_lsm_inh,pop_lsm_inh,connections_inh2inh,label="INH2INH_conn")
+sim.Projection(pop_lsm_inh,pop_lsm_inh,connections_inh2inh,label="INH2INH_conn", target='inhibitory')
 
 
 poisson_rate = 500.0
@@ -210,6 +215,8 @@ sim.Projection(pop_poisson_inh_n, pop_lsm_inh, sim.OneToOneConnector(weights=-po
 #
 # INPUT - Setup
 #
+
+print "Liquid->Liquid connections... Input Setup"
 
 tspk = simulation_timestep*50 # The neurons spike after 50 time steps!
 number_of_spikes = 500
