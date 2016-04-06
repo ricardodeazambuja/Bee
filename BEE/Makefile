@@ -38,8 +38,12 @@ compile:
 	@echo "Done!"
 
 install:
+	@echo "Installing the C library..."
 	cp ./bin/lib/libBEE.so /usr/local/lib/libBEE.so
+	@echo "Installing the Python module..."
 	python setup.py install
+	@echo "Done!"
+	@echo "From Python, import BEE to use the simulator."
 
 clean:
 	rm -r bin
