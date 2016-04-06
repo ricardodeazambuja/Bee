@@ -39,6 +39,7 @@ compile:
 
 install:
 	cp ./bin/lib/libBEE.so /usr/local/lib/libBEE.so
+	python setup.py install
 
 clean:
 	rm -r bin
