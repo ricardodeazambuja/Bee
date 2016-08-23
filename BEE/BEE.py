@@ -233,6 +233,34 @@ liquid_ext_update.argtypes = [
                              ]
 
 
+# Functions to define (change) the connections inside the liquid
+
+# Inhibitory => ? connections
+liquid_writes_pre_i_connections = SNNSIM.writes_pre_i_connections
+liquid_writes_pre_i_connections = None
+liquid_writes_pre_i_connections = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
+liquid_writes_pos_i_connections = SNNSIM.writes_pos_i_connections
+liquid_writes_pos_i_connections = None
+liquid_writes_pos_i_connections = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
+liquid_writes_pre_i_weights = SNNSIM.writes_pre_i_weights
+liquid_writes_pre_i_weights = None
+liquid_writes_pre_i_weights = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS')]
+
+# Excitatory => ? connections
+liquid_writes_pre_e_connections = SNNSIM.writes_pre_e_connections
+liquid_writes_pre_e_connections = None
+liquid_writes_pre_e_connections = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
+liquid_writes_pos_e_connections = SNNSIM.writes_pos_e_connections
+liquid_writes_pos_e_connections = None
+liquid_writes_pos_e_connections = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
+liquid_writes_pre_e_weights = SNNSIM.writes_pre_e_weights
+liquid_writes_pre_e_weights = None
+liquid_writes_pre_e_weights = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS')]
+
 ##
 ## Python functions to expose the ones ABOVE interfaced using ctypes:
 ##
@@ -743,3 +771,64 @@ def BEE_free():
         return time.time()
     else:
         print "Simulator is not initialized!"
+
+
+# New functions enabling the change of liquids connections from Python.
+
+def writes_pre_i_connections(pre_i_indices):
+    '''
+    Defines the indices of the INHIBITORY neurons with connections to another neuron inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pre_i_connections(pre_i_indices)
+    else:
+        print "Simulator is not ready!"
+
+
+def writes_pre_i_connections(pos_i_indices):
+    '''
+    Defines the indices of the neurons receiving connections from INHIBITORY ones inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pos_i_connections(pos_i_indices)
+    else:
+        print "Simulator is not ready!"
+
+
+def writes_pre_i_weights(weights):
+    '''
+    Defines the weights of the connections from INHIBITORY neurons inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pre_i_weights(weights)
+    else:
+        print "Simulator is not ready!"
+
+def writes_pre_e_connections(pre_e_indices):
+    '''
+    Defines the indices of the EXCITATORY neurons with connections to another neuron inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pre_e_connections(pre_e_indices)
+    else:
+        print "Simulator is not ready!"
+
+
+def writes_pre_e_connections(pos_e_indices):
+    '''
+    Defines the indices of the neurons receiving connections from EXCITATORY ones inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pos_e_connections(pos_e_indices)
+    else:
+        print "Simulator is not ready!"
+
+
+def writes_pre_e_weights(weights):
+    '''
+    Defines the weights of the connections from EXCITATORY neurons inside the liquid.
+    '''
+    if BEE_initialized() and BEE_connected():
+        liquid_writes_pre_e_weights(weights)
+    else:
+        print "Simulator is not ready!"
