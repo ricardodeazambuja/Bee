@@ -785,7 +785,7 @@ def writes_pre_i_connections(pre_i_indices):
         print "Simulator is not ready!"
 
 
-def writes_pre_i_connections(pos_i_indices):
+def writes_pos_i_connections(pos_i_indices):
     '''
     Defines the indices of the neurons receiving connections from INHIBITORY ones inside the liquid.
     '''
@@ -814,7 +814,7 @@ def writes_pre_e_connections(pre_e_indices):
         print "Simulator is not ready!"
 
 
-def writes_pre_e_connections(pos_e_indices):
+def writes_pos_e_connections(pos_e_indices):
     '''
     Defines the indices of the neurons receiving connections from EXCITATORY ones inside the liquid.
     '''
