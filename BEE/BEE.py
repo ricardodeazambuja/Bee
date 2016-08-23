@@ -773,7 +773,11 @@ def BEE_free():
         print "Simulator is not initialized!"
 
 
+#
 # New functions enabling the change of liquids connections from Python.
+# It is only possible to reduce the number of connections, but one cannot increase.
+# The reason for this is that I haven't added a function to reallocate memory from Python.
+#
 
 def writes_pre_i_connections(pre_i_indices):
     '''
