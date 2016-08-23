@@ -832,3 +832,16 @@ def writes_pre_e_weights(weights):
         liquid_writes_pre_e_weights(weights)
     else:
         print "Simulator is not ready!"
+
+
+def read_SpkLiq_number_of_inh_neurons():
+    '''
+    Reads the variable SpkLiq_number_of_inh_neurons
+    '''
+    return (ctypes.c_int.in_dll(SNNSIM, "SpkLiq_number_of_inh_neurons")).value
+
+def read_SpkLiq_number_of_exc_neurons():
+    '''
+    Reads the variable SpkLiq_number_of_exc_neurons
+    '''
+    return (ctypes.c_int.in_dll(SNNSIM, "SpkLiq_number_of_exc_neurons")).value
