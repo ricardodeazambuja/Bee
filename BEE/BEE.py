@@ -405,7 +405,7 @@ def output_stats(stats=1):
     - Number of inhibitory connections
     - Number of excitatory connections
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(4,dtype=numpy.int32)
         liquid_stats(output)
         if stats:
@@ -539,7 +539,7 @@ def output_pre_i_connections(number_of_neurons):
     '''
     Returns the indices of the inhibitory=>? PRE-synaptic connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_pre_i(output)
         return numpy.array(output)
@@ -552,7 +552,7 @@ def output_pos_i_connections(number_of_neurons):
     '''
     Returns the indices of the inhibitory=>? POS-synaptic connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_pos_i(output)
         return numpy.array(output)
@@ -565,7 +565,7 @@ def output_pre_i_weights(number_of_neurons):
     '''
     Returns the weight values of the inhibitory=>? connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.float32)
         liquid_w_i(output)
         return numpy.array(output)
@@ -578,7 +578,7 @@ def output_pre_e_connections(number_of_neurons):
     '''
     Returns the indices of the excitatory=>? PRE-synaptic connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_pre_e(output)
         return numpy.array(output)
@@ -591,7 +591,7 @@ def output_pos_e_connections(number_of_neurons):
     '''
     Returns the indices of the excitatory=>? POS-synaptic connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_pos_e(output)
         return numpy.array(output)
@@ -604,7 +604,7 @@ def output_pre_e_weights(number_of_neurons):
     '''
     Returns the weight values of the excitatory=>? connections.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.float32)
         liquid_w_e(output)
         return numpy.array(output)
@@ -617,7 +617,7 @@ def output_exc_indices(number_of_neurons):
     '''
     Returns the array with the neuron's indices belonging to excitatory group.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_exc_indices(output)
         return numpy.array(output)
@@ -630,7 +630,7 @@ def output_inh_indices(number_of_neurons):
     '''
     Returns the array with the neuron's indices belonging to inhibitory group.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized():
         output = numpy.empty(number_of_neurons,dtype=numpy.int32)
         liquid_inh_indices(output)
         return numpy.array(output)
@@ -803,7 +803,7 @@ def writes_pre_i_weights(weights):
     '''
     Defines the weights of the connections from INHIBITORY neurons inside the liquid.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized() and not BEE_connected():
         liquid_writes_pre_i_weights(weights)
     else:
         print "Simulator is not ready!"
@@ -832,11 +832,10 @@ def writes_pre_e_weights(weights):
     '''
     Defines the weights of the connections from EXCITATORY neurons inside the liquid.
     '''
-    if BEE_initialized() and BEE_connected():
+    if BEE_initialized() and not BEE_connected():
         liquid_writes_pre_e_weights(weights)
     else:
         print "Simulator is not ready!"
-
 
 def read_SpkLiq_number_of_inh_neurons():
     '''
