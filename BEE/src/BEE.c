@@ -2141,6 +2141,10 @@ void reads_membranes_init(float *output){
     memcpy(output,SpkLiq_neurons_membrane_init,sizeof(float)*SpkLiq_number_of_neurons); // initial membranes voltages
 }
 
+void writes_membranes_init(float *output){
+    memcpy(SpkLiq_neurons_membrane_init,output,sizeof(float)*SpkLiq_number_of_neurons); // initial membranes voltages
+}
+
 void reads_exc_synapses(float *output){
     memcpy(output,SpkLiq_neurons_exc_curr,sizeof(float)*SpkLiq_number_of_neurons); // excitatory currents
 }
@@ -2253,6 +2257,10 @@ void writes_excitatory_indices(int *output){
 
 void reads_excitatory_indices(int *output){
     memcpy(output,SpkLiq_excitatory_indices,sizeof(int)*SpkLiq_number_of_exc_neurons);
+}
+
+void writes_refrac_values(float *output){
+    memcpy(SpkLiq_refrac_values,output,sizeof(float)*SpkLiq_number_of_neurons);
 }
 
 void reads_refrac_values(float *output){
