@@ -861,7 +861,7 @@ def writes_exc_indices(exc_indices):
     '''
     Overwrites the array that controls which neurons are excitatory.
     '''
-    if BEE_initialized() and not BEE_connected()
+    if BEE_initialized() and not BEE_connected():
         if len(exc_indices)==read_SpkLiq_number_of_exc_neurons():
             liquid_writes_exc_indices(exc_indices)
         else:
@@ -873,7 +873,7 @@ def writes_inh_indices(inh_indices):
     '''
     Overwrites the array that controls which neurons are inhibitory.
     '''
-    if BEE_initialized() and not BEE_connected()
+    if BEE_initialized() and not BEE_connected():
         if len(inh_indices)==read_SpkLiq_number_of_inh_neurons():
             liquid_writes_inh_indices(inh_indices)
         else:
