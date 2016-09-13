@@ -320,6 +320,7 @@ def initialize_sim( my_net_shape=[15,3,3], my_lbd_value=1.2, my_seeds=numpy.rand
                             ctypes.c_int32(SpkLiq_threads_N)
     )
 
+    print "BEE_setup done!"
     # Initializes the liquid
     liquid_init()
 
@@ -774,11 +775,7 @@ def BEE_free():
     '''
     Frees all the memory allocated by the C shared library and makes possible to restart the simulator again.
     '''
-    if BEE_initialized():
-        BEE_freeC()
-        return time.time()
-    else:
-        print "Simulator is not initialized!"
+    BEE_freeC()
 
 
 #
