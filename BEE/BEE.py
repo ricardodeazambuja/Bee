@@ -173,17 +173,17 @@ liquid_exc_indices = SNNSIM.reads_excitatory_indices
 liquid_exc_indices.restype = None
 liquid_exc_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
-writes_liquid_exc_indices = SNNSIM.writes_excitatory_indices
-writes_liquid_exc_indices.restype = None
-writes_liquid_exc_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_exc_indices = SNNSIM.writes_excitatory_indices
+liquid_writes_exc_indices.restype = None
+liquid_writes_exc_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
 liquid_inh_indices = SNNSIM.reads_inhibitory_indices
 liquid_inh_indices.restype = None
 liquid_inh_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
-writes_liquid_inh_indices = SNNSIM.writes_inhibitory_indices
-writes_liquid_inh_indices.restype = None
-writes_liquid_inh_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_inh_indices = SNNSIM.writes_inhibitory_indices
+liquid_writes_inh_indices.restype = None
+liquid_writes_inh_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
 liquid_noisy_offset = SNNSIM.reads_noisy_offset_currents
 liquid_noisy_offset.restype = None
@@ -787,61 +787,61 @@ def BEE_free():
 # The reason for this is that I haven't added a function to reallocate memory from Python.
 #
 
-def writes_pre_i_connections(pre_i_indices):
+def writes_pre_i_connections(pre_i_indices,number_of_connections):
     '''
     Defines the indices of the INHIBITORY neurons with connections to another neuron inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pre_i_connections(pre_i_indices)
+        liquid_writes_pre_i_connections(pre_i_indices,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
 
-def writes_pos_i_connections(pos_i_indices):
+def writes_pos_i_connections(pos_i_indices,number_of_connections):
     '''
     Defines the indices of the neurons receiving connections from INHIBITORY ones inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pos_i_connections(pos_i_indices)
+        liquid_writes_pos_i_connections(pos_i_indices,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
 
-def writes_pre_i_weights(weights):
+def writes_pre_i_weights(weights,number_of_connections):
     '''
     Defines the weights of the connections from INHIBITORY neurons inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pre_i_weights(weights)
+        liquid_writes_pre_i_weights(weights,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
-def writes_pre_e_connections(pre_e_indices):
+def writes_pre_e_connections(pre_e_indices,number_of_connections):
     '''
     Defines the indices of the EXCITATORY neurons with connections to another neuron inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pre_e_connections(pre_e_indices)
+        liquid_writes_pre_e_connections(pre_e_indices,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
 
-def writes_pos_e_connections(pos_e_indices):
+def writes_pos_e_connections(pos_e_indices,number_of_connections):
     '''
     Defines the indices of the neurons receiving connections from EXCITATORY ones inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pos_e_connections(pos_e_indices)
+        liquid_writes_pos_e_connections(pos_e_indices,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
 
-def writes_pre_e_weights(weights):
+def writes_pre_e_weights(weights,number_of_connections):
     '''
     Defines the weights of the connections from EXCITATORY neurons inside the liquid.
     '''
     if BEE_initialized() and not BEE_connected():
-        liquid_writes_pre_e_weights(weights)
+        liquid_writes_pre_e_weights(weights,ctypes.c_int32(number_of_connections))
     else:
         print "Simulator is not ready!"
 
@@ -856,3 +856,27 @@ def read_SpkLiq_number_of_exc_neurons():
     Reads the variable SpkLiq_number_of_exc_neurons
     '''
     return (ctypes.c_int.in_dll(SNNSIM, "SpkLiq_number_of_exc_neurons")).value
+
+def writes_exc_indices(exc_indices):
+    '''
+    Overwrites the array that controls which neurons are excitatory.
+    '''
+    if BEE_initialized() and not BEE_connected()
+        if len(exc_indices)==read_SpkLiq_number_of_exc_neurons():
+            liquid_writes_exc_indices(exc_indices)
+        else:
+            print "The input array must have the same size returned by read_SpkLiq_number_of_exc_neurons()"
+    else:
+        print "Simulator is not ready!"
+
+def writes_inh_indices(inh_indices):
+    '''
+    Overwrites the array that controls which neurons are inhibitory.
+    '''
+    if BEE_initialized() and not BEE_connected()
+        if len(inh_indices)==read_SpkLiq_number_of_inh_neurons():
+            liquid_writes_inh_indices(inh_indices)
+        else:
+            print "The input array must have the same size returned by read_SpkLiq_number_of_inh_neurons()"
+    else:
+        print "Simulator is not ready!"
