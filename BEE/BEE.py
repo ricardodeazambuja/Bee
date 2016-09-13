@@ -173,9 +173,17 @@ liquid_exc_indices = SNNSIM.reads_excitatory_indices
 liquid_exc_indices.restype = None
 liquid_exc_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
+writes_liquid_exc_indices = SNNSIM.writes_excitatory_indices
+writes_liquid_exc_indices.restype = None
+writes_liquid_exc_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
 liquid_inh_indices = SNNSIM.reads_inhibitory_indices
 liquid_inh_indices.restype = None
 liquid_inh_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+
+writes_liquid_inh_indices = SNNSIM.writes_inhibitory_indices
+writes_liquid_inh_indices.restype = None
+writes_liquid_inh_indices.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
 
 liquid_noisy_offset = SNNSIM.reads_noisy_offset_currents
 liquid_noisy_offset.restype = None
@@ -238,28 +246,28 @@ liquid_ext_update.argtypes = [
 # Inhibitory => ? connections
 liquid_writes_pre_i_connections = SNNSIM.writes_pre_i_connections
 liquid_writes_pre_i_connections.restype = None
-liquid_writes_pre_i_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pre_i_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 liquid_writes_pos_i_connections = SNNSIM.writes_pos_i_connections
 liquid_writes_pos_i_connections.restype = None
-liquid_writes_pos_i_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pos_i_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 liquid_writes_pre_i_weights = SNNSIM.writes_pre_i_weights
 liquid_writes_pre_i_weights.restype = None
-liquid_writes_pre_i_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pre_i_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32, ctypes.c_int32]
 
 # Excitatory => ? connections
 liquid_writes_pre_e_connections = SNNSIM.writes_pre_e_connections
 liquid_writes_pre_e_connections.restype = None
-liquid_writes_pre_e_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pre_e_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 liquid_writes_pos_e_connections = SNNSIM.writes_pos_e_connections
 liquid_writes_pos_e_connections.restype = None
-liquid_writes_pos_e_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pos_e_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.int32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 liquid_writes_pre_e_weights = SNNSIM.writes_pre_e_weights
 liquid_writes_pre_e_weights.restype = None
-liquid_writes_pre_e_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS')]
+liquid_writes_pre_e_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 ##
 ## Python functions to expose the ones ABOVE interfaced using ctypes:

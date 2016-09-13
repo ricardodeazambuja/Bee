@@ -818,6 +818,7 @@ void SpikingLiquid_process_connections()
     If the user wants to create connections, it's necessary to populate:
     - SpkLiq_inhibitory_indices: array with the neuron's indices belonging to inhibitory group
     - SpkLiq_excitatory_indices: array with the neuron's indices belonging to excitatory group
+
     - SpkLiq_inh_connections: total number of inhibitory=>? connections
     - SpkLiq_exc_connections: total number of excitatory=>? connections
 
@@ -851,7 +852,7 @@ void SpikingLiquid_process_connections()
 
   Now I need to check how to divide the update workload among the threads and maybe how to make the function that process the spikes multithreaded!!!
   */
-    for(int i=0; i<SpkLiq_number_of_neurons; i++)
+    for(int i=0; i<SpkLiq_number_of_neurons; i++) // This goes through ALL the neurons, therefore the arrays below will be sparse!
     {
       SpkLiq_neurons_exc_injections[i]=NULL; //First fills everything with NULL pointer, hence if there is a NULL pointer means that position is not excitatory
       SpkLiq_neurons_inh_injections[i]=NULL; //First fills everything with NULL pointer, hence if there is a NULL pointer means that position is not inhibitory
@@ -861,7 +862,8 @@ void SpikingLiquid_process_connections()
 
     // Creates the memory positions to the inhibitory injections
     // This is a waste of memory, but avoids to start doing mallocs inside the loop that really organizes the memory
-    for(int i=0; i<SpkLiq_number_of_inh_neurons; i++){
+    for(int i=0; i<SpkLiq_number_of_inh_neurons; i++)
+    {
       const int idx = SpkLiq_inhibitory_indices[i];
       SpkLiq_neurons_inh_injections[idx]=malloc(sizeof(int)*(MAX_INDIVIDUAL_CONNECTIONS+1)); //the '+1' is for the '[0]'
       SpkLiq_neurons_inh_injections_w[idx]=malloc(sizeof(float)*(MAX_INDIVIDUAL_CONNECTIONS+1));
@@ -903,28 +905,32 @@ void SpikingLiquid_process_connections()
         const float weight = SpkLiq_w_i[i];
         int *restrict const idx_counter = &SpkLiq_neurons_inh_injections[idx_pre][0];
 
-        SpkLiq_neurons_inh_injections[idx_pre][(*idx_counter)+1]=idx_pos; //stores the pos connections
-                                                                          //the '+1' is to jump over the first position '[0]'
-        SpkLiq_neurons_inh_injections_w[idx_pre][(*idx_counter)+1]=weight; //stores the pos connections weight
-        (*idx_counter)++; //adds to the connection counter, remember this counter starts with ZERO
-        if((*idx_counter) == ((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS)) //initially the memory is MAX_INDIVIDUAL_CONNECTIONS
+        // NEW INTERNAL CONNECTIONS
+        if(weight != 0.0)
         {
-          memory_space[idx_pre]++;
-
-          SpkLiq_neurons_inh_injections[idx_pre] = realloc(SpkLiq_neurons_inh_injections[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(int)); //the '+1' is to add space for the '[0]'
-          if (SpkLiq_neurons_inh_injections[idx_pre]==NULL)
+          SpkLiq_neurons_inh_injections[idx_pre][(*idx_counter)+1]=idx_pos; //stores the pos connections
+                                                                            //the '+1' is to jump over the first position '[0]'
+          SpkLiq_neurons_inh_injections_w[idx_pre][(*idx_counter)+1]=weight; //stores the pos connections weight
+          (*idx_counter)++; //adds to the connection counter, remember this counter starts with ZERO
+          if((*idx_counter) == ((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS)) //initially the memory is MAX_INDIVIDUAL_CONNECTIONS
           {
-            fprintf(stderr,"SpkLiq_neurons_inh_injections[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
-            exit(EXIT_FAILURE);
-          }
+            memory_space[idx_pre]++;
 
-          SpkLiq_neurons_inh_injections_w[idx_pre] = realloc(SpkLiq_neurons_inh_injections_w[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(float)); //the '+1' is to add space for the '[0]'
-          if (SpkLiq_neurons_inh_injections_w[idx_pre]==NULL)
-          {
-            fprintf(stderr,"SpkLiq_neurons_inh_injections_w[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
-            exit(EXIT_FAILURE);
-          }
+            SpkLiq_neurons_inh_injections[idx_pre] = realloc(SpkLiq_neurons_inh_injections[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(int)); //the '+1' is to add space for the '[0]'
+            if (SpkLiq_neurons_inh_injections[idx_pre]==NULL)
+            {
+              fprintf(stderr,"SpkLiq_neurons_inh_injections[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
+              exit(EXIT_FAILURE);
+            }
 
+            SpkLiq_neurons_inh_injections_w[idx_pre] = realloc(SpkLiq_neurons_inh_injections_w[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(float)); //the '+1' is to add space for the '[0]'
+            if (SpkLiq_neurons_inh_injections_w[idx_pre]==NULL)
+            {
+              fprintf(stderr,"SpkLiq_neurons_inh_injections_w[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
+              exit(EXIT_FAILURE);
+            }
+
+          }
         }
     }
     free(memory_space);
@@ -958,24 +964,28 @@ void SpikingLiquid_process_connections()
         const float weight = SpkLiq_w_e[i];
         int *restrict const idx_counter = &SpkLiq_neurons_exc_injections[idx_pre][0];
 
-        SpkLiq_neurons_exc_injections[idx_pre][*idx_counter+1]=idx_pos; //stores the pos connections
-                                                                        //the '+1' is to jump over the first position '[0]'
-        SpkLiq_neurons_exc_injections_w[idx_pre][*idx_counter+1]=weight; //stores the pos connections
-        (*idx_counter)++; //adds to the connection counter, remember this counter starts with ZERO
-        if((*idx_counter) == ((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS))
+        // NEW INTERNAL CONNECTIONS
+        if(weight != 0.0)
         {
-          memory_space[idx_pre]++;
-          SpkLiq_neurons_exc_injections[idx_pre] = realloc(SpkLiq_neurons_exc_injections[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(int)); //the '+1' is to add space for the '[0]'
-          if (SpkLiq_neurons_exc_injections[idx_pre]==NULL)
+          SpkLiq_neurons_exc_injections[idx_pre][*idx_counter+1]=idx_pos; //stores the pos connections
+                                                                          //the '+1' is to jump over the first position '[0]'
+          SpkLiq_neurons_exc_injections_w[idx_pre][*idx_counter+1]=weight; //stores the pos connections
+          (*idx_counter)++; //adds to the connection counter, remember this counter starts with ZERO
+          if((*idx_counter) == ((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS))
           {
-            fprintf(stderr,"SpkLiq_neurons_exc_injections[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
-            exit(EXIT_FAILURE);
-          }
-          SpkLiq_neurons_exc_injections_w[idx_pre] = realloc(SpkLiq_neurons_exc_injections_w[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(float)); //the '+1' is to add space for the '[0]'
-          if (SpkLiq_neurons_exc_injections_w[idx_pre]==NULL)
-          {
-            fprintf(stderr,"SpkLiq_neurons_exc_injections_w[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
-            exit(EXIT_FAILURE);
+            memory_space[idx_pre]++;
+            SpkLiq_neurons_exc_injections[idx_pre] = realloc(SpkLiq_neurons_exc_injections[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(int)); //the '+1' is to add space for the '[0]'
+            if (SpkLiq_neurons_exc_injections[idx_pre]==NULL)
+            {
+              fprintf(stderr,"SpkLiq_neurons_exc_injections[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
+              exit(EXIT_FAILURE);
+            }
+            SpkLiq_neurons_exc_injections_w[idx_pre] = realloc(SpkLiq_neurons_exc_injections_w[idx_pre],((memory_space[idx_pre]+1)*MAX_INDIVIDUAL_CONNECTIONS+1)*sizeof(float)); //the '+1' is to add space for the '[0]'
+            if (SpkLiq_neurons_exc_injections_w[idx_pre]==NULL)
+            {
+              fprintf(stderr,"SpkLiq_neurons_exc_injections_w[%d] - memory_space[%d]+1:%d - realloc error\n",idx_pre,idx_pre,memory_space[idx_pre]+1);
+              exit(EXIT_FAILURE);
+            }
           }
         }
     }
@@ -2099,141 +2109,173 @@ int reads_spikes(int *output){
 }
 
 void reads_test_vthres_bits(int *output){
-    memcpy(output,SpkLiq_test_vthres_bits,sizeof(long int)*SpkLiq_number_of_long_ints); // saves the spikes output from the liquid
+    memcpy(output,SpkLiq_test_vthres_bits,sizeof(long int)*SpkLiq_number_of_long_ints); // spikes output from the liquid
 }
 
 void reads_test_vthres(int *output){
-    memcpy(output,SpkLiq_test_vthres,sizeof(int)*SpkLiq_number_of_neurons); // saves the spikes output from the liquid
+    memcpy(output,SpkLiq_test_vthres,sizeof(int)*SpkLiq_number_of_neurons); // spikes output from the liquid
 }
 
-//write
 void writes_membranes(float *output){
-    memcpy(SpkLiq_neurons_membrane,output,sizeof(float)*SpkLiq_number_of_neurons); // saves the membranes voltages
+    memcpy(SpkLiq_neurons_membrane,output,sizeof(float)*SpkLiq_number_of_neurons); // overwrites the membranes voltages
 }
 
 void reads_membranes(float *output){
-    memcpy(output,SpkLiq_neurons_membrane,sizeof(float)*SpkLiq_number_of_neurons); // saves the membranes voltages
+    memcpy(output,SpkLiq_neurons_membrane,sizeof(float)*SpkLiq_number_of_neurons); // membranes voltages
 }
 
 void reads_membranes_init(float *output){
-    memcpy(output,SpkLiq_neurons_membrane_init,sizeof(float)*SpkLiq_number_of_neurons); // saves the initial membranes voltages
+    memcpy(output,SpkLiq_neurons_membrane_init,sizeof(float)*SpkLiq_number_of_neurons); // initial membranes voltages
 }
 
 void reads_exc_synapses(float *output){
-    memcpy(output,SpkLiq_neurons_exc_curr,sizeof(float)*SpkLiq_number_of_neurons); // saves the excitatory currents
+    memcpy(output,SpkLiq_neurons_exc_curr,sizeof(float)*SpkLiq_number_of_neurons); // excitatory currents
 }
 
 void reads_inh_synapses(float *output){
-    memcpy(output,SpkLiq_neurons_inh_curr,sizeof(float)*SpkLiq_number_of_neurons); // saves the inhibitory currents
+    memcpy(output,SpkLiq_neurons_inh_curr,sizeof(float)*SpkLiq_number_of_neurons); // inhibitory currents
 }
 
-//write
-void writes_pre_i_connections(int *output){
-    memcpy(SpkLiq_pre_i,output,sizeof(int)*SpkLiq_inh_connections); // saves the inhibitory currents
+// NEW REALLOC
+void writes_pre_i_connections(int *output, int number_of_connections){
+  SpkLiq_pre_i = realloc(SpkLiq_pre_i,sizeof(int)*number_of_connections);
+  if (SpkLiq_pre_i==NULL)
+  {
+    fprintf(stderr,"SpkLiq_pre_i - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_pre_i,output,sizeof(int)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pre_i_connections(int *output){
-    memcpy(output,SpkLiq_pre_i,sizeof(int)*SpkLiq_inh_connections); // saves the inhibitory currents
+    memcpy(output,SpkLiq_pre_i,sizeof(int)*SpkLiq_inh_connections);
 }
 
-//write
-void writes_pos_i_connections(int *output){
-    memcpy(SpkLiq_pos_i,output,sizeof(int)*SpkLiq_inh_connections);
+// NEW REALLOC
+void writes_pos_i_connections(int *output, int number_of_connections){
+  SpkLiq_pos_i = realloc(SpkLiq_pos_i,sizeof(int)*number_of_connections);
+  if (SpkLiq_pos_i==NULL)
+  {
+    fprintf(stderr,"SpkLiq_pos_i - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_pos_i,output,sizeof(int)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pos_i_connections(int *output){
     memcpy(output,SpkLiq_pos_i,sizeof(int)*SpkLiq_inh_connections);
 }
 
-//writes
-void writes_pre_i_weights(float *output){
-    memcpy(SpkLiq_w_i,output,sizeof(float)*SpkLiq_inh_connections); // saves the inhibitory currents
+// NEW REALLOC
+void writes_pre_i_weights(float *output, int number_of_connections){
+  SpkLiq_w_i = realloc(SpkLiq_w_i,sizeof(float)*number_of_connections);
+  if (SpkLiq_w_i==NULL)
+  {
+    fprintf(stderr,"SpkLiq_w_i - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_w_i,output,sizeof(float)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pre_i_weights(float *output){
-    memcpy(output,SpkLiq_w_i,sizeof(float)*SpkLiq_inh_connections); // saves the inhibitory currents
+    memcpy(output,SpkLiq_w_i,sizeof(float)*SpkLiq_inh_connections);
 }
 
-//write
-void writes_pre_e_connections(int *output){
-    memcpy(SpkLiq_pre_e,output,sizeof(int)*SpkLiq_exc_connections); // saves the inhibitory currents
+// NEW REALLOC
+void writes_pre_e_connections(int *output, int number_of_connections){
+  SpkLiq_pre_e = realloc(SpkLiq_pre_e,sizeof(int)*number_of_connections);
+  if (SpkLiq_pre_e==NULL)
+  {
+    fprintf(stderr,"SpkLiq_pre_e - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_pre_e,output,sizeof(int)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pre_e_connections(int *output){
-    memcpy(output,SpkLiq_pre_e,sizeof(int)*SpkLiq_exc_connections); // saves the inhibitory currents
+    memcpy(output,SpkLiq_pre_e,sizeof(int)*SpkLiq_exc_connections);
 }
 
-//write
-void writes_pos_e_connections(int *output){
-    memcpy(SpkLiq_pos_e,output,sizeof(int)*SpkLiq_exc_connections);
+// NEW REALLOC
+void writes_pos_e_connections(int *output, int number_of_connections){
+  SpkLiq_pos_e = realloc(SpkLiq_pos_e,sizeof(int)*number_of_connections);
+  if (SpkLiq_pos_e==NULL)
+  {
+    fprintf(stderr,"SpkLiq_pos_e - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_pos_e,output,sizeof(int)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pos_e_connections(int *output){
     memcpy(output,SpkLiq_pos_e,sizeof(int)*SpkLiq_exc_connections);
 }
 
-//write
-void writes_pre_e_weights(float *output){
-    memcpy(SpkLiq_w_e,output,sizeof(float)*SpkLiq_exc_connections); // saves the inhibitory currents
+// NEW REALLOC
+void writes_pre_e_weights(float *output, int number_of_connections){
+  SpkLiq_w_e = realloc(SpkLiq_w_e,sizeof(float)*number_of_connections);
+  if (SpkLiq_pos_e==NULL)
+  {
+    fprintf(stderr,"SpkLiq_w_e - realloc error\n");
+    exit(EXIT_FAILURE);
+  }
+  memcpy(SpkLiq_w_e,output,sizeof(float)*number_of_connections); // overwrites the inhibitory PRE connections
 }
 
 void reads_pre_e_weights(float *output){
-    memcpy(output,SpkLiq_w_e,sizeof(float)*SpkLiq_exc_connections); // saves the inhibitory currents
+    memcpy(output,SpkLiq_w_e,sizeof(float)*SpkLiq_exc_connections);
 }
 
-//write
 void writes_inhibitory_indices(int *output){
-    memcpy(SpkLiq_inhibitory_indices,output,sizeof(int)*SpkLiq_number_of_inh_neurons); // saves the inhibitory currents
+    memcpy(SpkLiq_inhibitory_indices,output,sizeof(int)*SpkLiq_number_of_inh_neurons); // overwrites the inhibitory indices
 }
 
 void reads_inhibitory_indices(int *output){
-    memcpy(output,SpkLiq_inhibitory_indices,sizeof(int)*SpkLiq_number_of_inh_neurons); // saves the inhibitory currents
+    memcpy(output,SpkLiq_inhibitory_indices,sizeof(int)*SpkLiq_number_of_inh_neurons);
 }
 
-//write
 void writes_excitatory_indices(int *output){
-    memcpy(SpkLiq_excitatory_indices,output,sizeof(int)*SpkLiq_number_of_exc_neurons); // saves the inhibitory currents
+    memcpy(SpkLiq_excitatory_indices,output,sizeof(int)*SpkLiq_number_of_exc_neurons); // overwrites the excitatory indices
 }
 
 void reads_excitatory_indices(int *output){
-    memcpy(output,SpkLiq_excitatory_indices,sizeof(int)*SpkLiq_number_of_exc_neurons); // saves the inhibitory currents
+    memcpy(output,SpkLiq_excitatory_indices,sizeof(int)*SpkLiq_number_of_exc_neurons);
 }
 
 void reads_refrac_values(float *output){
-    memcpy(output,SpkLiq_refrac_values,sizeof(float)*SpkLiq_number_of_neurons); // exposes the values of the refractory values
+    memcpy(output,SpkLiq_refrac_values,sizeof(float)*SpkLiq_number_of_neurons);
 }
 
-//write
 void writes_noisy_offset_currents(float *output){
-    memcpy(SpkLiq_noisy_offset_currents,output,sizeof(float)*SpkLiq_number_of_neurons); // exposes the values of the constant offset currents
+    memcpy(SpkLiq_noisy_offset_currents,output,sizeof(float)*SpkLiq_number_of_neurons);
 }
 
 void reads_noisy_offset_currents(float *output){
-    memcpy(output,SpkLiq_noisy_offset_currents,sizeof(float)*SpkLiq_number_of_neurons); // exposes the values of the constant offset currents
+    memcpy(output,SpkLiq_noisy_offset_currents,sizeof(float)*SpkLiq_number_of_neurons);
 }
 
 void reads_noisy_currents(float *output){
-    memcpy(output,SpkLiq_noisy_currents,sizeof(float)*SpkLiq_number_of_neurons); // exposes the values of the noisy currents
+    memcpy(output,SpkLiq_noisy_currents,sizeof(float)*SpkLiq_number_of_neurons);
 }
 
-//writes
 void writes_connected(int *output){
-    memcpy(SpkLiq_neurons_connected,output,sizeof(int)*SpkLiq_number_of_neurons); // indicates with 1 if the neuron has a connection to other neuron
+    memcpy(SpkLiq_neurons_connected,output,sizeof(int)*SpkLiq_number_of_neurons);
+    // indicates with 1 if the neuron has a connection to other neuron
 }
 
 void reads_connected(int *output){
-    memcpy(output,SpkLiq_neurons_connected,sizeof(int)*SpkLiq_number_of_neurons); // indicates with 1 if the neuron has a connection to other neuron
+    memcpy(output,SpkLiq_neurons_connected,sizeof(int)*SpkLiq_number_of_neurons);
+    // indicates with 1 if the neuron has a connection to other neuron
 }
 
-//write
 void writes_SpkLiq_inh_connections(const int input_value){
     SpkLiq_inh_connections=input_value;
 }
 
-//write
 void writes_SpkLiq_exc_connections(const int input_value){
     SpkLiq_exc_connections=input_value;
 }
+
 
 void change_liquid_parameters(float *output){
     int c = 0;

@@ -46,4 +46,5 @@ install:
 	@echo "From Python, import BEE to use the simulator."
 
 clean:
-	rm -r bin
+	rm -r -f bin
+	rm -r -f build
