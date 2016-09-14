@@ -2155,7 +2155,11 @@ void reads_inh_synapses(float *output){
 
 // NEW REALLOC
 void writes_pre_i_connections(int *output, int number_of_connections){
-  SpkLiq_pre_i = realloc(SpkLiq_pre_i,sizeof(int)*number_of_connections);
+  if (SpkLiq_pre_i)
+    SpkLiq_pre_i = realloc(SpkLiq_pre_i,sizeof(int)*number_of_connections);
+  else
+    SpkLiq_pre_i = malloc(sizeof(int)*number_of_connections);
+
   if (SpkLiq_pre_i==NULL)
   {
     fprintf(stderr,"SpkLiq_pre_i - realloc error\n");
@@ -2170,7 +2174,11 @@ void reads_pre_i_connections(int *output){
 
 // NEW REALLOC
 void writes_pos_i_connections(int *output, int number_of_connections){
-  SpkLiq_pos_i = realloc(SpkLiq_pos_i,sizeof(int)*number_of_connections);
+  if (SpkLiq_pos_i)
+    SpkLiq_pos_i = realloc(SpkLiq_pos_i,sizeof(int)*number_of_connections);
+  else
+    SpkLiq_pos_i = malloc(sizeof(int)*number_of_connections);
+
   if (SpkLiq_pos_i==NULL)
   {
     fprintf(stderr,"SpkLiq_pos_i - realloc error\n");
@@ -2185,7 +2193,11 @@ void reads_pos_i_connections(int *output){
 
 // NEW REALLOC
 void writes_pre_i_weights(float *output, int number_of_connections){
-  SpkLiq_w_i = realloc(SpkLiq_w_i,sizeof(float)*number_of_connections);
+  if (SpkLiq_w_i)
+    SpkLiq_w_i = realloc(SpkLiq_w_i,sizeof(float)*number_of_connections);
+  else
+    SpkLiq_w_i = malloc(sizeof(float)*number_of_connections);
+
   if (SpkLiq_w_i==NULL)
   {
     fprintf(stderr,"SpkLiq_w_i - realloc error\n");
@@ -2200,7 +2212,11 @@ void reads_pre_i_weights(float *output){
 
 // NEW REALLOC
 void writes_pre_e_connections(int *output, int number_of_connections){
-  SpkLiq_pre_e = realloc(SpkLiq_pre_e,sizeof(int)*number_of_connections);
+  if (SpkLiq_pre_e)
+    SpkLiq_pre_e = realloc(SpkLiq_pre_e,sizeof(int)*number_of_connections);
+  else
+    SpkLiq_pre_e = malloc(sizeof(int)*number_of_connections);
+
   if (SpkLiq_pre_e==NULL)
   {
     fprintf(stderr,"SpkLiq_pre_e - realloc error\n");
@@ -2215,7 +2231,11 @@ void reads_pre_e_connections(int *output){
 
 // NEW REALLOC
 void writes_pos_e_connections(int *output, int number_of_connections){
-  SpkLiq_pos_e = realloc(SpkLiq_pos_e,sizeof(int)*number_of_connections);
+  if (SpkLiq_pos_e)
+    SpkLiq_pos_e = realloc(SpkLiq_pos_e,sizeof(int)*number_of_connections);
+  else
+    SpkLiq_pos_e = malloc(sizeof(int)*number_of_connections);
+
   if (SpkLiq_pos_e==NULL)
   {
     fprintf(stderr,"SpkLiq_pos_e - realloc error\n");
@@ -2230,7 +2250,11 @@ void reads_pos_e_connections(int *output){
 
 // NEW REALLOC
 void writes_pre_e_weights(float *output, int number_of_connections){
-  SpkLiq_w_e = realloc(SpkLiq_w_e,sizeof(float)*number_of_connections);
+  if (SpkLiq_w_e)
+    SpkLiq_w_e = realloc(SpkLiq_w_e,sizeof(float)*number_of_connections);
+  else
+    SpkLiq_w_e = malloc(sizeof(float)*number_of_connections);
+
   if (SpkLiq_w_e==NULL)
   {
     fprintf(stderr,"SpkLiq_w_e - realloc error\n");
@@ -2374,64 +2398,124 @@ void free_all(){
     {
       // init allocations
       if (SpkLiq_number_of_neurons_slice)
+      {
         free(SpkLiq_number_of_neurons_slice); //stores the number of neurons each thread are going to process
+        SpkLiq_number_of_neurons_slice=NULL;
+      }
 
       if (SpkLiq_neurons_membrane)
+      {
         free(SpkLiq_neurons_membrane); //stores the membrane potentials for all neurons
+        SpkLiq_neurons_membrane=NULL;
+      }
 
       if (SpkLiq_neurons_membrane_init)
+      {
         free(SpkLiq_neurons_membrane_init); //stores the INITIAL membrane potentials for all neurons
+        SpkLiq_neurons_membrane_init=NULL;
+      }
 
       if (SpkLiq_neurons_exc_curr)
+      {
         free(SpkLiq_neurons_exc_curr); //excitatory currents levels for all neurons
+        SpkLiq_neurons_exc_curr=NULL;
+      }
 
       if (SpkLiq_neurons_inh_curr)
+      {
         free(SpkLiq_neurons_inh_curr); //inhibitory currents levels for all neurons
+        SpkLiq_neurons_inh_curr=NULL;
+      }
 
       if (SpkLiq_refrac_timer)
+      {
         free(SpkLiq_refrac_timer); //timers used to control the refractory period
+        SpkLiq_refrac_timer=NULL;
+      }
 
       if (SpkLiq_test_vthres)
+      {
         free(SpkLiq_test_vthres); //controls which neuron is above the voltage threshold and should spike
+        SpkLiq_test_vthres=NULL;
+      }
 
       if (SpkLiq_noisy_offset_currents)
+      {
         free(SpkLiq_noisy_offset_currents); //values of the neuron model constant noisy offset currents
+        SpkLiq_noisy_offset_currents=NULL;
+      }
 
       if (SpkLiq_noisy_currents)
+      {
         free(SpkLiq_noisy_currents); //values of the neuron model variable noisy currents
+        SpkLiq_noisy_currents=NULL;
+      }
 
       if (SpkLiq_inhibitory_indices)
+      {
         free(SpkLiq_inhibitory_indices); //Indices of the inhibitory neurons inside the liquid
+        SpkLiq_inhibitory_indices=NULL;
+      }
 
       if (SpkLiq_excitatory_indices)
+      {
         free(SpkLiq_excitatory_indices);  //Indices of the excitatory neurons inside the liquid
+        SpkLiq_excitatory_indices=NULL;
+      }
 
       if (SpkLiq_liquid_indices_shuffled)
+      {
         free(SpkLiq_liquid_indices_shuffled); //used to generate the random SpkLiq_inhibitory_indices/SpkLiq_excitatory_indices
+        SpkLiq_liquid_indices_shuffled=NULL;
+      }
 
       if (SpkLiq_refrac_values)
+      {
         free(SpkLiq_refrac_values); //stores the refractory periods for all neurons in the liquid
+        SpkLiq_refrac_values=NULL;
+      }
 
       if (SpkLiq_3Didx)
+      {
         free(SpkLiq_3Didx); //stores the liquid's 3D structure according to the neuron index
+        SpkLiq_3Didx=NULL;
+      }
 
       if (SpkLiq_spike_time)
+      {
         free(SpkLiq_spike_time);  //stores the last time each neuron spiked
+        SpkLiq_spike_time=NULL;
+      }
 
       if (SpkLiq_neurons_connected)
+      {
         free(SpkLiq_neurons_connected); //indicates if the neuron has a connection
+        SpkLiq_neurons_connected=NULL;
+      }
 
       if (SpkLiq_threads_ptrs)
+      {
         free(SpkLiq_threads_ptrs); //stores the pointers used with the pthread_create
+        SpkLiq_threads_ptrs=NULL;
+      }
 
       if (SpkLiq_thread_id)
+      {
         free(SpkLiq_thread_id); //stores the thread ids used with the pthread_create
+        SpkLiq_thread_id=NULL;
+      }
 
       if (SpkLiq_number_of_inh_connections_thread)
+      {
         free(SpkLiq_number_of_inh_connections_thread); //stores how many inhibitory connections each thread will process
+        SpkLiq_number_of_inh_connections_thread=NULL;
+      }
 
       if (SpkLiq_number_of_exc_connections_thread)
+      {
         free(SpkLiq_number_of_exc_connections_thread); //stores how many excitatory connections each thread will process
+        SpkLiq_number_of_exc_connections_thread=NULL;
+      }
 
 
 
@@ -2469,62 +2553,106 @@ void free_all(){
       if (SpkLiq_connected) //verifies if the connections where processed
       {
           free(SpkLiq_number_of_inh_neurons_thread); //stores the number of inhibitory neurons each thread is going to receive
+          SpkLiq_number_of_inh_neurons_thread=NULL;
           free(SpkLiq_number_of_inh_neurons_thread_total); //stores the number of inhibitory neurons each thread is going to receive
+          SpkLiq_number_of_inh_neurons_thread_total=NULL;
           free(SpkLiq_number_of_exc_neurons_thread); //stores the number of excitatory neurons each thread is going to receive
+          SpkLiq_number_of_exc_neurons_thread=NULL;
           free(SpkLiq_number_of_exc_neurons_thread_total); //stores the number of excitatory neurons each thread is going to receive
+          SpkLiq_number_of_exc_neurons_thread_total=NULL;
           free(SpkLiq_receive_spike_i_idx_thread); //stores how many items are inside each of the above arrays (each thread is going to generate an variable size)
+          SpkLiq_receive_spike_i_idx_thread=NULL;
           free(SpkLiq_receive_spike_e_idx_thread); //stores how many items are inside each of the above arrays (each thread is going to generate an variable size)
+          SpkLiq_receive_spike_e_idx_thread=NULL;
 
           //this one is initialized as arrays of pointers inside init
           for(int i=0; i<5; i++)
+          {
             free(SpkLiq_threads_states[i]);
+            SpkLiq_threads_states[i]=NULL;
+          }
 
 
           //this ones are initialized as arrays of pointers inside init
           for (int i=0; i<SpkLiq_threads_N; i++){
             // Cleans the variables used by the individual threads
             free(SpkLiq_receive_spike_i_thread[i]);
+            SpkLiq_receive_spike_i_thread[i]=NULL;
             free(SpkLiq_receive_spike_i_w_thread[i]);
+            SpkLiq_receive_spike_i_w_thread[i]=NULL;
             free(SpkLiq_receive_spike_e_thread[i]);
+            SpkLiq_receive_spike_e_thread[i]=NULL;
             free(SpkLiq_receive_spike_e_w_thread[i]);
+            SpkLiq_receive_spike_e_w_thread[i]=NULL;
             free(SpkLiq_neurons_inh_injections[i]);
+            SpkLiq_neurons_inh_injections[i]=NULL;
             free(SpkLiq_neurons_exc_injections[i]);
+            SpkLiq_neurons_exc_injections[i]=NULL;
             free(SpkLiq_neurons_exc_injections_w[i]);
+            SpkLiq_neurons_exc_injections_w[i]=NULL;
             free(SpkLiq_neurons_inh_injections_w[i]);
+            SpkLiq_neurons_inh_injections_w[i]=NULL;
           }
 
           // Cleans the variables used to keep the pointers above
           free(SpkLiq_receive_spike_i_thread); //stores the indices of which liquid's inhibitory neuron receives a spike (output from the threads)
+          SpkLiq_receive_spike_i_thread=NULL;
           free(SpkLiq_receive_spike_i_w_thread); //stores the weights of the above received spikes
+          SpkLiq_receive_spike_i_w_thread=NULL;
           free(SpkLiq_receive_spike_e_thread); //stores the indices of which liquid's excitatory neuron receives a spike (output from the threads)
+          SpkLiq_receive_spike_e_thread=NULL;
           free(SpkLiq_receive_spike_e_w_thread); //stores the weights of the above received spikes
+          SpkLiq_receive_spike_e_w_thread=NULL;
 
           free(SpkLiq_pre_i); //stores the indices of the inhibitory=>? pre-synaptic connections in the liquid
+          SpkLiq_pre_i=NULL;
           free(SpkLiq_pos_i); //stores the indices of the inhibitory=>? pos-synaptic connections in the liquid
+          SpkLiq_pos_i=NULL;
           free(SpkLiq_w_i); //stores the weights of the connections above
+          SpkLiq_w_i=NULL;
           free(SpkLiq_pre_e); //stores the indices of the inhibitory=>? pre-synaptic connections in the liquid
+          SpkLiq_pre_e=NULL;
           free(SpkLiq_pos_e); //stores the indices of the inhibitory=>? pos-synaptic connections in the liquid
+          SpkLiq_pos_e=NULL;
           free(SpkLiq_w_e); //stores the weights of the connections above
-
+          SpkLiq_w_e=NULL;
         }
 
         if (SpkLiq_neurons_inh_injections)
+        {
           free(SpkLiq_neurons_inh_injections);
+          SpkLiq_neurons_inh_injections=NULL;
+        }
 
         if (SpkLiq_neurons_exc_injections)
+        {
           free(SpkLiq_neurons_exc_injections);
+          SpkLiq_neurons_exc_injections=NULL;
+        }
 
         if (SpkLiq_neurons_exc_injections_w)
+        {
           free(SpkLiq_neurons_exc_injections_w);
+          SpkLiq_neurons_exc_injections_w=NULL;
+        }
 
         if (SpkLiq_neurons_inh_injections_w)
+        {
           free(SpkLiq_neurons_inh_injections_w);
+          SpkLiq_neurons_inh_injections_w=NULL;
+        }
 
         if (SpkLiq_neurons_exc_injections_total)
+        {
           free(SpkLiq_neurons_exc_injections_total); //stores the cummulative total number of connections according to the neurons index
+          SpkLiq_neurons_exc_injections_total=NULL;
+        }
 
         if (SpkLiq_neurons_inh_injections_total)
+        {
           free(SpkLiq_neurons_inh_injections_total); //stores the cummulative total number of connections according to the neurons index
+          SpkLiq_neurons_inh_injections_total=NULL;
+        }
 
         SpkLiq_initialized = 0; //tells Python the main variables are not available
         SpkLiq_connected = 0;  //tells Python the connection variables are not available

@@ -72,7 +72,7 @@ BEE_writes_SpkLiq_inh_connections.restype = None
 BEE_writes_SpkLiq_inh_connections.argtypes =[ctypes.c_int32]
 
 BEE_reads_SpkLiq_inh_connections =  SNNSIM.reads_SpkLiq_inh_connections
-BEE_reads_SpkLiq_inh_connections.restype = [ctypes.c_int32]
+BEE_reads_SpkLiq_inh_connections.restype = ctypes.c_int32
 BEE_reads_SpkLiq_inh_connections.argtypes = None
 
 BEE_writes_SpkLiq_exc_connections =  SNNSIM.writes_SpkLiq_exc_connections
@@ -80,7 +80,7 @@ BEE_writes_SpkLiq_exc_connections.restype = None
 BEE_writes_SpkLiq_exc_connections.argtypes =[ctypes.c_int32]
 
 BEE_reads_SpkLiq_exc_connections =  SNNSIM.reads_SpkLiq_exc_connections
-BEE_reads_SpkLiq_exc_connections.restype = [ctypes.c_int32]
+BEE_reads_SpkLiq_exc_connections.restype = ctypes.c_int32
 BEE_reads_SpkLiq_exc_connections.argtypes = None
 
 #
@@ -274,7 +274,7 @@ liquid_writes_pos_i_connections.argtypes = [numpy.ctypeslib.ndpointer(dtype=nump
 
 liquid_writes_pre_i_weights = SNNSIM.writes_pre_i_weights
 liquid_writes_pre_i_weights.restype = None
-liquid_writes_pre_i_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32, ctypes.c_int32]
+liquid_writes_pre_i_weights.argtypes = [numpy.ctypeslib.ndpointer(dtype=numpy.float32, flags='ALIGNED,C_CONTIGUOUS'), ctypes.c_int32]
 
 # Excitatory => ? connections
 liquid_writes_pre_e_connections = SNNSIM.writes_pre_e_connections
