@@ -2293,8 +2293,16 @@ void writes_SpkLiq_inh_connections(const int input_value){
     SpkLiq_inh_connections=input_value;
 }
 
+int reads_SpkLiq_inh_connections(){
+    return SpkLiq_inh_connections;
+}
+
 void writes_SpkLiq_exc_connections(const int input_value){
     SpkLiq_exc_connections=input_value;
+}
+
+int reads_SpkLiq_exc_connections(){
+    return SpkLiq_exc_connections;
 }
 
 
