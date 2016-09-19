@@ -340,7 +340,7 @@ def initialize_sim( my_net_shape=[15,3,3], my_lbd_value=1.2, my_seeds=numpy.rand
                             ctypes.c_int32(SpkLiq_threads_N)
     )
 
-    print "BEE_setup done!"
+    # print "BEE_setup done!"
     # Initializes the liquid
     liquid_init()
 
