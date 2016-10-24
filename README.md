@@ -1,5 +1,4 @@
-# LiquidStateMachine-Python
-My experiments with Liquid State Machines (LSM) using Python
+# BEE - The Spiking Reservoir Simulator... aka Liquid State Machine :D
 
 Yes, I know, this repository is a mess :)
 
