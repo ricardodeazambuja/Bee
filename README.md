@@ -1,7 +1,5 @@
 # BEE - The Spiking Reservoir (LSM) Simulator
 
-Yes, I know, this repository is a mess :)
-
 If you want to find out more details about the main simulator I'd recommend to have a look here:  
 https://github.com/ricardodeazambuja/BEE/blob/master/BEE/BEE_Simulator_DEVELOPMENT.ipynb
 
