@@ -28,10 +28,11 @@ https://github.com/ricardodeazambuja/BEE/tree/master/BEE
 
 
 ## Here is a list of published papers that use BEE (they have plenty of code examples to follow):
-- https://github.com/ricardodeazambuja/IJCNN2016
-- https://github.com/ricardodeazambuja/ICONIP2016
-- https://github.com/ricardodeazambuja/IJCNN2017-2
-- https://github.com/davi-sala/I2MTC2017-LSMFusion
+- [Graceful Degradation under Noise on Brain Inspired Robot Controllers](https://github.com/ricardodeazambuja/ICONIP2016)
+- [Diverse, Noisy and Parallel: a New Spiking Neural Network Approach for Humanoid Robot Control](https://github.com/ricardodeazambuja/IJCNN2016)
+- [Short-Term Plasticity in a Liquid State Machine Biomimetic Robot Arm Controller](https://github.com/ricardodeazambuja/IJCNN2017)
+- [Neurorobotic Simulations on the Degradation of Multiple Column Liquid State Machines](https://github.com/ricardodeazambuja/IJCNN2017-2)
+- [Sensor Fusion Approach Using Liquid StateMachines for Positioning Control](https://github.com/ricardodeazambuja/I2MTC2017-LSMFusion)
 
 ## If you are using BEE in your work, please, send me the link and I will add it here :)
 
