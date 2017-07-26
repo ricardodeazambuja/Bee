@@ -37,4 +37,6 @@ https://github.com/ricardodeazambuja/BEE/tree/master/BEE
 ## If you are using BEE in your work, please, send me the link and I will add it here :)
 
 ## References
-1. Maass, Wolfgang, Thomas Natschläger, and Henry Markram. “Real-Time Computing without Stable States: A New Framework for Neural Computation Based on Perturbations.” Neural Computation 14, no. 11 (November 2002): 2531–60.
+1. Maass, Wolfgang, Thomas Natschläger, and Henry Markram. “Real-Time Computing without Stable States: A New Framework for Neural Computation Based on Perturbations.” Neural Computation 14, no. 11 (November 2002): 2531–60.  
+
+http://ricardodeazambuja.com/
