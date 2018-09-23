@@ -36,6 +36,10 @@ https://github.com/ricardodeazambuja/BEE/tree/master/BEE
 
 ## If you are using Bee in your work, please, send me the link and I will add it here :)
 
+## Videos
+- [Animation of what happens insite a LSM](https://www.youtube.com/watch?v=_xm77cxpXV8)
+- [Controlling the BAXTER robot using Liquid State Machines](https://www.youtube.com/watch?v=4gF7mfjGllA)
+
 ## References
 1. Maass, Wolfgang, Thomas Natschläger, and Henry Markram. “Real-Time Computing without Stable States: A New Framework for Neural Computation Based on Perturbations.” Neural Computation 14, no. 11 (November 2002): 2531–60.  
 
