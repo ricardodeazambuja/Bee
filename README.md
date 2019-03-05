@@ -37,7 +37,7 @@ https://github.com/ricardodeazambuja/BEE/tree/master/BEE
 ## If you are using Bee in your work, please, send me the link and I will add it here :)
 
 ## Videos
-- [Animation of what happens insite a LSM](https://www.youtube.com/watch?v=_xm77cxpXV8)
+- [Animation of what happens inside a LSM](https://www.youtube.com/watch?v=_xm77cxpXV8)
 - [Controlling the BAXTER robot using Liquid State Machines](https://www.youtube.com/watch?v=4gF7mfjGllA)
 
 ## References
