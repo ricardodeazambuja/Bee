@@ -46,4 +46,11 @@ https://github.com/ricardodeazambuja/BEE/tree/master/BEE
 ## References
 1. Maass, Wolfgang, Thomas Natschläger, and Henry Markram. “Real-Time Computing without Stable States: A New Framework for Neural Computation Based on Perturbations.” Neural Computation 14, no. 11 (November 2002): 2531–60.  
 
+
+## Other projects you may like to check:
+* [colab_utils](https://github.com/ricardodeazambuja/colab_utils/): Some useful (or not so much) Python stuff for Google Colab notebooks
+* [ExecThatCell](https://github.com/ricardodeazambuja/ExecThatCell): (Re)Execute a Jupyter (colab) notebook cell programmatically by searching for its label.
+* [Maple-Syrup-Pi-Camera](https://github.com/ricardodeazambuja/Maple-Syrup-Pi-Camera): Low power('ish) AIoT smart camera (3D printed) based on the Raspberry Pi Zero W and Google Coral EdgeTPU
+* [The CogniFly Project](https://github.com/thecognifly): Open-source autonomous flying robots robust to collisions and smart enough to do something interesting!
+
 http://ricardodeazambuja.com/
