@@ -17,7 +17,7 @@ The simulator has the ability to automatically generate the reservoir (liquid) i
 
 An example of generated connections (red dots/lines are excitatory and blue ones inhibitory) is presented below:
 ![liquid example](https://github.com/ricardodeazambuja/BEE/blob/master/imgs/liquid.png)     
-**Note (24/04/2023): I just realised, by looking at the image above, that it could be a better idea to enforce neurons to have connections to two other neurons or input/output, input/neuron or output/neuron connections, otherwise that neuron won't contribute to the internal dynamics and may even waste an input or output that falls on it.**
+**Note (24/04/2023): I just realised, by looking at the image above, that it could be a better idea to enforce neurons to have connections to two other neurons or input/output, input/neuron or output/neuron connections, otherwise that neuron won't contribute to the internal dynamics and may even waste an input or output that falls on it. In addition to this minimum amount of "neighbour" connections, it should have a guarantee that every neuron has at least a path to one of the liquid's input and a path to one output.**
 
 All the parameters for the neuron model or the internal connections can be defined by the user. Also, motivated by the results presented in [Short-term plasticity in a liquid state machine biomimetic robot arm controller](https://github.com/ricardodeazambuja/IJCNN2017-2), [Short Term Plasticity (STP)](http://www.scholarpedia.org/article/Short-term_synaptic_plasticity) and time delays were not implemented in order to simplify and optimise the simulator. In its current version, it supports, at least, Linux and OS X (it was never tested by the author on any version of Windows).
 
