@@ -4,7 +4,7 @@ The **Bee simulator** is an open source [Spiking Neural Network (SNN)](https://e
 
 ![Block diagram of an LSM](https://github.com/ricardodeazambuja/BEE/blob/master/imgs/lsm.png)
 
-It was developed together with my PhD thesis [(you can see where it was used in my publications)](http://ricardodeazambuja.com/publications/) exclusively to solve the specific problems presented by neurorobotics experiments.  
+It was developed together with my PhD thesis [(you can see where it was used in my publications)](https://github.com/ricardodeazambuja/BEE#here-is-a-list-of-published-papers-that-use-bee-they-have-plenty-of-code-examples-to-follow) exclusively to solve the specific problems presented by neurorobotics experiments.  
 
 Bee uses the C library [pthreads (POSIX threads)](https://en.wikipedia.org/wiki/POSIX_Threads) in order to speed up the simulation of LSMs by processing input and output spikes in a parallel way. A Python wrapper is supplied to simplify the user interaction with the software.  
 The neuron model, a special type of [(Leaky_integrate-and-fire)](https://en.wikipedia.org/wiki/Biological_neuron_model#Leaky_integrate-and-fire) with extra exponential synapses - see [1] for details, is hardcoded (fixed), following what is presented bellow, and the solution for the differential equations is calculated by the [Euler's method](https://en.wikipedia.org/wiki/Euler_method) according to the simulation's time step specified by the user. 
